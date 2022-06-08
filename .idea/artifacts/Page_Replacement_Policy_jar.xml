@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="Page_Replacement_Policy:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/Page_Replacement_Policy_jar</output-path>
+    <root id="archive" name="Page_Replacement_Policy.jar">
+      <element id="module-output" name="Page_Replacement_Policy" />
+    </root>
+  </artifact>
+</component>

@@ -7,40 +7,51 @@ import datatype.Result_data;
 import javax.swing.*;
 import java.util.ArrayList;
 
-public class FIFO {
+public class MFU {
     public ArrayList<Result_data> run(String str, String frame, JTextArea textArea, Page_Fault_Rate data) {
         int frame_len = Integer.parseInt(frame);
         char[] result = new char[frame_len];
-        for(int i = 0; i < frame_len; ++i)
+        int[] lru_count = new int[frame_len];
+        for (int i = 0; i < frame_len; ++i)
             result[i] = '\0';
         int count = 0;
         ArrayList<Result_data> result_dataArrayList = new ArrayList<>();
-        for(int i = 0; i < str.length(); ++i){
+        for (int i = 0; i < str.length(); ++i) {
             ColorBox box = new ColorBox();
             boolean find = false;
             char c = str.charAt(i);
             String s = "Data " + c + " is ";
-            for(int j = 0; j < count; ++j){
-                if(result[j] == c){
+            for (int j = 0; j < count; ++j) {
+                if (result[j] == c) {
                     box.set(j, "GREEN");
                     data.setHit();
                     find = true;
                     s += "Hit\n";
+                    lru_count[j]++;
                     break;
                 }
             }
-            if(!find){
-                if(count < frame_len){
+            if (!find) {
+                if (count < frame_len) {
                     data.setPage_fault();
                     result[count] = c;
                     box.set(count, "RED");
                     s += "Page Fault\n";
+                    lru_count[count] = 1;
                     count++;
-                } else{
+                } else {
                     data.setMigrated();
-                    if (count - 1 >= 0) System.arraycopy(result, 1, result, 0, count - 1);
-                    result[count - 1] = c;
-                    box.set(count - 1, "MAGENTA");
+                    int max = 0;
+                    int idx = 0;
+                    for (int j = 0; j < frame_len; ++j) {
+                        if (lru_count[j] < max) {
+                            max = lru_count[j];
+                            idx = j;
+                        }
+                    }
+                    box.set(idx, "MAGENTA");
+                    result[idx] = c;
+                    lru_count[idx] = 1;
                     s += "Migrated\n";
                 }
             }

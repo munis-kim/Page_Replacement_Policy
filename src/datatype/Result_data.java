@@ -11,4 +11,16 @@ public class Result_data {
         this.str = new char[str.length];
         System.arraycopy(str, 0, this.str, 0, str.length);
     }
+
+    public char[] getStr(){
+        return str;
+    }
+
+    public char getHead(){
+        return head;
+    }
+
+    public ColorBox getBox(){
+        return box;
+    }
 }
